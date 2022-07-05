@@ -12,7 +12,7 @@ services:
       - DOCKER_HOST=unix:///var/run/docker.sock
       - AWS_ACCESS_KEY_ID=fake
       - AWS_SECRET_ACCESS_KEY=fake
-      - SERVICES=secretsmanager,ssm
+      - SERVICES=ssm
       - PORT_WEB_UI=${LOCALSTACK_UI_PORT}
       - DEFAULT_REGION=${LOCALSTACK_REGION}
       - DEBUG=0

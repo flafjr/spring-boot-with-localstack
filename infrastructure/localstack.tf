@@ -1,4 +1,5 @@
-# https://github.com/MrWormHole/hotdog-localstack-PoC
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/guides/custom-service-endpoints#localstack
+# https://baptiste.bouchereau.pro/tutorial/deploy-localstack-resources-with-terraform/
 provider "aws" {
   region                      = "us-east-1"
   skip_credentials_validation = true
@@ -8,7 +9,6 @@ provider "aws" {
   secret_key                  = "fake"
 
   endpoints {
-    secretsmanager  = "http://localhost:4566"
     ssm             = "http://localhost:4566"
   }
 }
