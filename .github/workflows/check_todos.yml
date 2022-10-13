@@ -1,0 +1,16 @@
+name: Look for todos and fixmes
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          if grep --exclude-dir={.git,.github} -rE "TODO|FIXME|console\.log"; then
+               exit 1
+          else
+              echo "All good"
+          fi
