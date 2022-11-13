@@ -1,21 +1,47 @@
+# https://geshan.com.np/blog/2021/12/docker-postgres/
+# https://levelup.gitconnected.com/creating-and-filling-a-postgres-db-with-docker-compose-e1607f6f882f
+# https://github.com/jdaarevalo/docker_postgres_with_data
 version: '3.8'
-
 services:
-  localstack:
-    container_name: "localstack"
-    image: localstack/localstack:0.14.0
-    ports:
-      - '${LOCALSTACK_PORT}:${LOCALSTACK_PORT}'
-      - '${LOCALSTACK_UI_PORT}:${LOCALSTACK_UI_PORT}'
+#  localstack:
+#    container_name: "localstack"
+#    image: localstack/localstack:0.14.0
+#    ports:
+#      - '${LOCALSTACK_PORT}:${LOCALSTACK_PORT}'
+#      - '${LOCALSTACK_UI_PORT}:${LOCALSTACK_UI_PORT}'
+#    environment:
+#      - EDGE_PORT=${LOCALSTACK_PORT}
+#      - DOCKER_HOST=unix:///var/run/docker.sock
+#      - AWS_ACCESS_KEY_ID=fake
+#      - AWS_SECRET_ACCESS_KEY=fake
+#      - SERVICES=ssm
+#      - PORT_WEB_UI=${LOCALSTACK_UI_PORT}
+#      - DEFAULT_REGION=${LOCALSTACK_REGION}
+#      - DEBUG=0
+#      - HOSTNAME_EXTERNAL=localhost
+#    volumes:
+#      - '/var/run/docker.sock:/var/run/docker.sock'
+  db:
+    image: postgres
+    restart: always
     environment:
-      - EDGE_PORT=${LOCALSTACK_PORT}
-      - DOCKER_HOST=unix:///var/run/docker.sock
-      - AWS_ACCESS_KEY_ID=fake
-      - AWS_SECRET_ACCESS_KEY=fake
-      - SERVICES=ssm
-      - PORT_WEB_UI=${LOCALSTACK_UI_PORT}
-      - DEFAULT_REGION=${LOCALSTACK_REGION}
-      - DEBUG=0
-      - HOSTNAME_EXTERNAL=localhost
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
     volumes:
-      - '/var/run/docker.sock:/var/run/docker.sock'
+      - ./postgres-data:/var/lib/postgresql/data
+      # copy the sql script to create tables
+      - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      # copy the sql script to fill tables
+      - ./sql/fill_tables.sql:/docker-entrypoint-initdb.d/fill_tables.sql
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  db:
+    driver: local
