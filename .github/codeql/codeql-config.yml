@@ -1,0 +1,5 @@
+# https://github.com/github/codeql
+# https://codeql.github.com/
+name: 'CodeQL config'
+paths-ignore:
+  - target
